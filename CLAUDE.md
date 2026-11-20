@@ -28,3 +28,4 @@ Die App sendet nichts, Namen und Ergebnisse bleiben im Browser (localStorage). `
 
 - Die Lösungs-Hinweise bei „passende Aufgabe finden“ sind Beispiele, keine Musterlösung.
 - Aufgaben wurden von den PDFs abgetippt; Zahlen einmal gegen das Blatt prüfen.
+- Seite ist `noindex` (Meta-Tag in index.html); robots.txt bringt auf github.io/foedima nichts, bleibt nur als Hinweis.
