@@ -5,7 +5,7 @@ Auswertungshilfe für zwei FÖDiMA-Standortbestimmungen (PIKAS/DZLM), die Joshua
 
 ## Dateien
 
-- `FOEDIMA-Auswertung.html` – die App (Doppelklick). Vanilla JS, keine Abhängigkeiten, kein Build.
+- `index.html` – die App (Doppelklick oder online). Vanilla JS, keine Abhängigkeiten, kein Build.
 - `pdf/standort1-multiplikation.pdf`, `pdf/standort2-addition.pdf` – die Original-Arbeitsblätter, nach denen die Aufgabenliste gebaut ist.
 
 ## Bedienung / Logik
@@ -21,7 +21,8 @@ Auswertungshilfe für zwei FÖDiMA-Standortbestimmungen (PIKAS/DZLM), die Joshua
 
 ## Hosting
 
-Nur lokal, nicht veröffentlichen (Schülernamen und Ergebnisse). Die App sendet nichts.
+GitHub Pages: Repo `edutoolz/foedima` (Remote `git@github-edutoolz:edutoolz/foedima.git`), Adresse https://edutoolz.github.io/foedima/ . Veröffentlichen: `git push`.
+Die App sendet nichts, Namen und Ergebnisse bleiben im Browser (localStorage). `pdf/` (Original-Blätter PIKAS/DZLM) ist in `.gitignore`, nie committen.
 
 ## Offen
 
