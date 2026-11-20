@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FÖDiMA-Auswertung</title>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#1d2733;--mut:#6b7785;--line:#d9dfe6;--acc:#2a6f8f;--ok:#2e8b57;--okbg:#dff3e6;--bad:#c0392b;--badbg:#fbe0dc;--m1:#2a6f8f;--m2:#e08a1e}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--acc);color:#fff;padding:12px 18px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+header h1{font-size:19px;margin:0}
+header .sp{flex:1}
+button,select,input{font:inherit}
+.btn{background:#fff;color:var(--acc);border:0;border-radius:8px;padding:7px 12px;cursor:pointer;font-weight:600}
+.btn.sec{background:rgba(255,255,255,.18);color:#fff}
+.btn.dark{background:var(--acc);color:#fff}
+.btn.lite{background:#eef2f5;color:var(--ink);font-weight:500}
+nav{display:flex;gap:6px;padding:10px 18px 0;flex-wrap:wrap}
+nav button{border:1px solid var(--line);background:#e9eef2;padding:8px 16px;border-radius:10px 10px 0 0;cursor:pointer;color:var(--ink)}
+nav button.on{background:var(--card);border-bottom-color:var(--card);font-weight:700;color:var(--acc)}
+main{background:var(--card);margin:0 18px 30px;border:1px solid var(--line);border-radius:0 10px 10px 10px;padding:16px}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:14px}
+.bar label{color:var(--mut);font-size:13px}
+.bar input[type=text],.bar input[type=date],.bar select{padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:#fff}
+.tabs2{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.tabs2 button{border:0;background:#fff;padding:7px 14px;cursor:pointer}
+.tabs2 button.on{background:var(--acc);color:#fff;font-weight:600}
+.legend{font-size:13px;color:var(--mut);margin:0 0 10px}
+.wrap{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:separate;border-spacing:0;font-size:14px}
+th,td{padding:3px 4px;border-bottom:1px solid var(--line);border-right:1px solid #eef1f4;text-align:center;background:#fff}
+thead{position:sticky;top:0;z-index:2}
+thead th{background:#eef2f5;font-weight:600}
+thead tr:first-child th.grp{font-size:12px;vertical-align:bottom}
+.nm{position:sticky;left:0;z-index:1;text-align:left;min-width:200px;max-width:240px;background:#fff}
+.kn{min-width:76px;font-size:13px}
+.lab{font-weight:500}
+tr.sum td{background:#f7f9fb;font-weight:600;white-space:nowrap;min-width:38px}
+tr.sum td.nm{background:#f7f9fb}
+tr.gh td.nm{background:#eef2f5}
+thead .nm{z-index:3;background:#eef2f5}
+tr.k2 td{border-bottom:2px solid var(--line)}
+.vt{writing-mode:vertical-rl;transform:rotate(180deg);height:175px;white-space:nowrap;font-weight:500;font-size:12px;padding:6px 2px}
+.grp{border-left:2px solid var(--line)}
+.c{width:36px;height:26px;border:1px solid var(--line);border-radius:6px;background:#fff;cursor:pointer;font-size:15px;font-weight:700;line-height:1;padding:0}
+.c.r{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.c.f{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.ml{font-size:11px;font-weight:700;border-radius:5px;padding:1px 6px;color:#fff}
+.ml1{background:var(--m1)}.ml2{background:var(--m2)}
+.num{min-width:48px}
+.up{color:var(--ok);font-weight:700}.down{color:var(--bad);font-weight:700}.eq{color:var(--mut);font-weight:700}
+.x{border:0;background:none;color:var(--mut);cursor:pointer;font-size:16px}
+.x:hover{color:var(--bad)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.card{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.card b{display:block;font-size:24px}
+.card small{color:var(--mut)}
+.pb{display:flex;align-items:center;gap:8px;margin:2px 0}
+.pb .t{flex:1;height:11px;background:#e9eef2;border-radius:6px;overflow:hidden}
+.pb .t i{display:block;height:100%}
+.pb span{width:42px;text-align:right;font-size:12px;color:var(--mut)}
+.i1{background:var(--m1)}.i2{background:var(--m2)}
+table.l td,table.l th{text-align:left;padding:5px 8px}
+table.l td.n,table.l th.n{text-align:center}
+.gh td{background:#eef2f5;font-weight:700}
+.lege i{display:inline-block;width:11px;height:11px;border-radius:3px;margin:0 4px 0 12px;vertical-align:-1px}
+.empty{color:var(--mut);padding:30px;text-align:center}
+details{margin-top:14px}summary{cursor:pointer;color:var(--acc);font-weight:600}
+dialog{border:0;border-radius:12px;padding:20px;max-width:440px;width:92%;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+dialog textarea{width:100%;height:150px;padding:8px;border:1px solid var(--line);border-radius:8px;font:inherit}
+.hint{font-size:12px;color:var(--mut)}
+#print-head{display:none}
+@media print{
+  header,nav,.bar,.noprint,#v-eingabe,#v-klasse{display:none!important}
+  body{background:#fff}main{border:0;margin:0;padding:0}
+  #print-head{display:block;font-size:18px;font-weight:700;margin-bottom:8px}
+  #v-kind{display:block!important}
+  .wrap{max-height:none;overflow:visible;border:0}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>FÖDiMA-Auswertung</h1>
+  <span class="sp"></span>
+  <button class="btn sec" id="b-kinder">+ Kinder hinzufügen</button>
+  <button class="btn sec" id="b-sichern">Sichern (Datei)</button>
+  <button class="btn sec" id="b-laden">Laden</button>
+  <input type="file" id="f-laden" accept=".json" hidden>
+</header>
+<nav>
+  <button data-v="eingabe">Eingabe</button>
+  <button data-v="kind">Pro Kind</button>
+  <button data-v="klasse">Klasse &amp; Aufgaben</button>
+</nav>
+<main>
+  <p id="warn" class="hint" hidden style="background:#fff3cd;padding:8px 10px;border-radius:8px;color:#7a5b00">Der Browser erlaubt hier kein Speichern. Die Eingaben gehen beim Schließen verloren. Öffne die Datei per Doppelklick im Browser (Chrome/Safari) oder nutze „Sichern (Datei)“.</p>
+  <div class="bar">
+    <div class="tabs2" id="tests"></div>
+    <label>Messung 1 <input type="date" id="d1"></label>
+    <label>Messung 2 <input type="date" id="d2"></label>
+  </div>
+  <div id="v-eingabe"></div>
+  <div id="v-kind"></div>
+  <div id="v-klasse"></div>
+</main>
+
+<dialog id="dlg">
+  <h3 style="margin-top:0">Kinder hinzufügen</h3>
+  <p class="hint">Ein Name pro Zeile. Du kannst eine ganze Liste einfügen.</p>
+  <textarea id="namen" placeholder="Anna&#10;Ben&#10;Chiara"></textarea>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+    <button class="btn lite" id="dlg-x">Abbrechen</button>
+    <button class="btn dark" id="dlg-ok">Hinzufügen</button>
+  </div>
+</dialog>
+
+<script>
+/* ---------- Aufgaben (nach den Original-Blättern der Standortbestimmungen) ---------- */
+const TESTS = {
+  mult: { name:'1 · Multiplikation (ZR 100)', code:'OV100M', gruppen:[
+    {titel:'1 Alltagssituationen', items:[
+      ['1a','Bild → Malaufgabe schreiben','3 Stapel mit je 4 Büchern: 3 · 4 = 12 (4 · 3 = 12 auch richtig)'],
+      ['1b','Bild zu 4 · 3 = 12 malen','4 Gruppen mit je 3 Dingen (oder 3 mit je 4)']]},
+    {titel:'2 Rechengeschichten', items:[
+      ['2a','Malaufgabe zur Geschichte','4 · 2 = 8 (2 · 4 = 8 auch richtig)']]},
+    {titel:'3 Punktebild', items:[
+      ['3a','Punktebild 1 schreiben','2 · 4 = 8 (oder 4 · 2)'],
+      ['3b','Punktebild 2 schreiben','3 · 6 = 18 (oder 6 · 3)'],
+      ['3c','Punktebild 3 schreiben','5 · 3 = 15 (oder 3 · 5)'],
+      ['3d','Punktebild 4 · 3 zeichnen','4 Reihen mit je 3 Punkten (oder 3 mit je 4)'],
+      ['3e','Punktebild 3 · 2 zeichnen','3 Reihen mit je 2 Punkten (oder 2 mit je 3)']]},
+    {titel:'4 Punktereihe', items:[
+      ['4a','Punktereihe → Malaufgabe','4 · 3 = 12 (4 Sprünge à 3)'],
+      ['4b','6 · 5 einzeichnen','6 Sprünge à 5, Ergebnis 30']]},
+    {titel:'5 Ableitungsstrategien', items:[
+      ['5a','6 · 7 lösen','42 (von 5 · 7 = 35)'],
+      ['5b','passende Aufgabe 1 finden','z. B. 7 · 6 = 42, 5 · 7 + 7 = 42, 10 · 7 − 4 · 7 = 42'],
+      ['5c','3 · 8 lösen','24 (von 3 · 7 = 21)'],
+      ['5d','passende Aufgabe 2 finden','z. B. 8 · 3 = 24, 3 · 7 + 3 = 24, 3 · 4 · 2 = 24']]},
+    {titel:'6 Einfache Aufgaben', items:[
+      ['6a','1 · 5','5'],['6b','5 · 6','30'],['6c','7 · 10','70'],['6d','2 · 8','16'],
+      ['6e','5 · 7','35'],['6f','9 · 2','18'],['6g','3 · 3','9'],['6h','10 · 8','80']]}
+  ]},
+  add: { name:'2 · Addition (ZR 100)', code:'OV100A', gruppen:[
+    {titel:'1 Einfache Aufgaben', items:[
+      ['1a','70 + 20','90'],['1b','56 + 4','60'],['1c','10 + 34','44'],['1d','42 + 23','65'],
+      ['1e','17 + 36','53'],['1f','24 + 20','44'],['1g','34 + 8','42'],['1h','3 + 72','75'],
+      ['1i','Einfache eingekreist','z. B. 70+20, 56+4, 10+34, 24+20 (Aufgaben mit Zehnern/Zehnerzahl)']]},
+    {titel:'2 Aufgaben ableiten', items:[
+      ['2a','2+6 / 20+60 lösen','8 / 80'],['2b','passende Aufgabe (1)','z. B. 6 + 2 = 8, 22 + 6 = 28, 200 + 600 = 800'],
+      ['2c','8+5 / 38+5 lösen','13 / 43'],['2d','passende Aufgabe (2)','z. B. 28 + 5 = 33, 18 + 5 = 23'],
+      ['2e','40+10 / 40+13 lösen','50 / 53'],['2f','passende Aufgabe (3)','z. B. 40 + 11 = 51, 40 + 12 = 52'],
+      ['2g','10+7 / 50+7 lösen','17 / 57'],['2h','passende Aufgabe (4)','z. B. 30 + 7 = 37, 20 + 7 = 27']]},
+    {titel:'3 Schrittweise', items:[
+      ['3a','27 + 34 Ergebnis','61 (27 + 30 = 57, 57 + 4 = 61)'],
+      ['3b','Rechenweg / Rechenstrich','Schritte wie bei Emma: erst Zehner, dann Einer']]},
+    {titel:'4 Stellenweise', items:[
+      ['4a','27 + 22 Ergebnis','49 (20 + 20 = 40, 7 + 2 = 9)'],
+      ['4b','Rechenweg stellenweise','Zehner und Einer getrennt, dann zusammen']]},
+    {titel:'5 Hilfsaufgabe', items:[
+      ['5a','32 + 29 Ergebnis','61 (32 + 30 = 62, 62 − 1 = 61)'],
+      ['5b','Rechenweg / Rechenstrich','Hilfsaufgabe mit der Zehnerzahl, dann ausgleichen']]},
+    {titel:'6 Geschicktes Rechnen', items:[
+      ['6a','46 + 19, erster Weg','65 mit nachvollziehbarem Weg'],
+      ['6b','46 + 19, anderer Weg','65 mit zweitem, anderem Weg']]}
+  ]}
+};
+for (const t of Object.values(TESTS)) {
+  t.items = [];
+  t.gruppen.forEach((g,gi) => g.items = g.items.map(([id,l,s]) => { const it={id,l,s,g:gi}; t.items.push(it); return it; }));
+}
+
+/* ---------- Zustand ---------- */
+const KEY = 'foedima-auswertung-v1';
+let S = load();
+function leer(){ return {kinder:[], daten:{mult:{},add:{}}, datum:{mult:{1:'',2:''},add:{1:'',2:''}}, test:'mult', view:'eingabe', kind:null}; }
+function load(){ try { return Object.assign(leer(), JSON.parse(localStorage.getItem(KEY)||'{}')); } catch(e){ return leer(); } } /* ohne Speicher: leer starten */
+let speicherOK = true;
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e) { if (speicherOK) { speicherOK = false; const w = document.getElementById('warn'); if (w) w.hidden = false; } }
+}
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uid = () => Math.random().toString(36).slice(2,9);
+const T = () => TESTS[S.test];
+const kinder = () => [...S.kinder].sort((a,b) => a.name.localeCompare(b.name,'de'));
+function wert(kid, m, id){ return (((S.daten[S.test][kid]||{})['m'+m])||{})[id]; }
+function setze(kid, m, id){
+  const d = S.daten[S.test][kid] = S.daten[S.test][kid] || {m1:{},m2:{}};
+  const cur = d['m'+m][id], next = cur===undefined ? 'r' : cur==='r' ? 'f' : undefined;
+  if (next===undefined) delete d['m'+m][id]; else d['m'+m][id] = next;
+  save();
+}
+/* Auswertung: r = richtig, f = falsch, leer = noch nicht bewertet (zählt nicht) */
+function score(kid, m, items){
+  let r=0, f=0;
+  for (const it of items) { const v = wert(kid,m,it.id); if (v==='r') r++; else if (v==='f') f++; }
+  const n = r+f;
+  return {r, f, n, total:items.length, pct: n ? r/n*100 : null};
+}
+const delta = (a,b) => (a.pct===null||b.pct===null) ? null : b.pct - a.pct;
+const fmtP = p => p===null ? '–' : Math.round(p)+' %';
+function fmtD(d){
+  if (d===null) return '<span class="eq">–</span>';
+  const v = Math.round(d);
+  return v>0 ? `<span class="up">▲ +${v}</span>` : v<0 ? `<span class="down">▼ ${v}</span>` : `<span class="eq">= 0</span>`;
+}
+const fmtDt = s => s ? s.split('-').reverse().join('.') : '';
+
+/* ---------- Ansicht: Eingabe (Aufgaben untereinander, Kinder nebeneinander) ---------- */
+function renderEingabe(){
+  const t = T(), ks = kinder();
+  if (!ks.length) return $('#v-eingabe').innerHTML = '<div class="empty">Noch keine Kinder. Oben auf „+ Kinder hinzufügen“ klicken.</div>';
+  const sc = ks.map(k => [score(k.id,1,t.items), score(k.id,2,t.items)]);
+  let h = `<p class="legend">Feld antippen: erst <b style="color:var(--ok)">✓ richtig</b>, dann <b style="color:var(--bad)">✗ falsch</b>, dann wieder leer (= nicht bewertet, zählt nicht mit). Pro Kind zwei Spalten: <span class="ml ml1">1</span> erste und <span class="ml ml2">2</span> zweite Messung. Mit der Maus über einer Aufgabe steht die Lösung.</p>
+  <div class="wrap"><table><thead><tr><th class="nm">Aufgabe</th>`;
+  ks.forEach(k => h += `<th colspan="2" class="grp kn">${esc(k.name)} <button class="x" data-del="${k.id}" title="Kind löschen">×</button></th>`);
+  h += '</tr><tr><th class="nm"></th>';
+  ks.forEach(() => h += '<th class="grp"><span class="ml ml1">1</span></th><th><span class="ml ml2">2</span></th>');
+  h += '</tr></thead><tbody>';
+  const sum = (titel, f) => { h += `<tr class="sum"><td class="nm">${titel}</td>`; ks.forEach((k,i) => h += f(sc[i][0], sc[i][1])); h += '</tr>'; };
+  sum('Fehler', (a,b) => `<td class="grp">${a.n?a.f:'–'}</td><td>${b.n?b.f:'–'}</td>`);
+  sum('richtig', (a,b) => `<td class="grp">${fmtP(a.pct)}</td><td>${fmtP(b.pct)}</td>`);
+  sum('Veränderung', (a,b) => `<td class="grp" colspan="2">${fmtD(delta(a,b))}</td>`);
+  t.gruppen.forEach(g => {
+    h += `<tr class="gh"><td class="nm">${esc(g.titel)}</td><td colspan="${ks.length*2}"></td></tr>`;
+    g.items.forEach(it => {
+      h += `<tr><td class="nm lab" title="${esc(it.l+' → '+it.s)}">${esc(it.l)}</td>`;
+      ks.forEach(k => [1,2].forEach(m => {
+        const v = wert(k.id,m,it.id);
+        h += `<td class="${m===1?'grp':''}"><button class="c ${v||''}" data-k="${k.id}" data-m="${m}" data-i="${it.id}">${v==='r'?'✓':v==='f'?'✗':''}</button></td>`;
+      }));
+      h += '</tr>';
+    });
+  });
+  h += '</tbody></table></div>';
+  h += `<details class="noprint"><summary>Lösungen anzeigen</summary><table class="l">` +
+    t.gruppen.map(g => `<tr class="gh"><td colspan="2">${esc(g.titel)}</td></tr>` + g.items.map(it => `<tr><td>${esc(it.l)}</td><td>${esc(it.s)}</td></tr>`).join('')).join('') + '</table></details>';
+  $('#v-eingabe').innerHTML = h;
+}
+
+/* ---------- Ansicht: Pro Kind ---------- */
+function renderKind(){
+  const t = T(), ks = kinder();
+  if (!ks.length) return $('#v-kind').innerHTML = '<div class="empty">Noch keine Kinder.</div>';
+  if (!ks.find(k => k.id===S.kind)) S.kind = ks[0].id;
+  const k = ks.find(k => k.id===S.kind);
+  const s1 = score(k.id,1,t.items), s2 = score(k.id,2,t.items), d = delta(s1,s2);
+  let h = `<div class="bar noprint"><label>Kind <select id="sel-kind">${ks.map(x=>`<option value="${x.id}"${x.id===k.id?' selected':''}>${esc(x.name)}</option>`).join('')}</select></label>
+    <button class="btn dark" onclick="window.print()">Blatt drucken</button></div>
+    <div id="print-head">${esc(k.name)} · FÖDiMA ${esc(t.name)}</div>
+    <div class="cards">
+      <div class="card"><small>Messung 1${S.datum[S.test][1]?' · '+fmtDt(S.datum[S.test][1]):''}</small><b>${fmtP(s1.pct)}</b><small>${s1.f} Fehler · ${s1.r} richtig · ${s1.n}/${s1.total} bewertet</small></div>
+      <div class="card"><small>Messung 2${S.datum[S.test][2]?' · '+fmtDt(S.datum[S.test][2]):''}</small><b>${fmtP(s2.pct)}</b><small>${s2.f} Fehler · ${s2.r} richtig · ${s2.n}/${s2.total} bewertet</small></div>
+      <div class="card"><small>Veränderung</small><b>${fmtD(d)}</b><small>Prozentpunkte</small></div>
+    </div>
+    <table class="l" style="width:100%"><thead><tr><th>Aufgabe</th><th class="n">Messung 1</th><th class="n">Messung 2</th><th class="n">Veränderung</th></tr></thead><tbody>`;
+  const sym = (kid,m,it) => { const v = wert(kid,m,it.id); return v==='r' ? '<b style="color:var(--ok)">✓</b>' : v==='f' ? '<b style="color:var(--bad)">✗</b>' : '<span class="hint">–</span>'; };
+  t.gruppen.forEach(g => {
+    const a = score(k.id,1,g.items), b = score(k.id,2,g.items);
+    h += `<tr class="gh"><td>${esc(g.titel)}</td><td class="n">${a.n?a.r+' / '+a.n:'–'}</td><td class="n">${b.n?b.r+' / '+b.n:'–'}</td><td class="n">${fmtD(delta(a,b))}</td></tr>`;
+    g.items.forEach(it => h += `<tr><td>&nbsp;&nbsp;${esc(it.l)}</td><td class="n">${sym(k.id,1,it)}</td><td class="n">${sym(k.id,2,it)}</td><td class="n"></td></tr>`);
+  });
+  h += '</tbody></table>';
+  $('#v-kind').innerHTML = h;
+}
+
+/* ---------- Ansicht: Klasse & Aufgaben ---------- */
+function bar(p, cls){ return `<div class="pb"><div class="t"><i class="${cls}" style="width:${p===null?0:p}%"></i></div><span>${fmtP(p)}</span></div>`; }
+function renderKlasse(){
+  const t = T(), ks = kinder();
+  if (!ks.length) return $('#v-klasse').innerHTML = '<div class="empty">Noch keine Kinder.</div>';
+  /* Anteil richtig pro Aufgabe über alle Kinder (nur bewertete Zellen) */
+  const rate = (items, m) => { let r=0,n=0; for (const k of ks) for (const it of items) { const v = wert(k.id,m,it.id); if (v) { n++; if (v==='r') r++; } } return n ? r/n*100 : null; };
+  let h = `<p class="legend lege"><b>Wie viel Prozent der Kinder haben die Aufgabe richtig?</b> <i style="background:var(--m1)"></i>Messung 1 <i style="background:var(--m2)"></i>Messung 2</p>
+    <table class="l" style="width:100%;max-width:760px"><tbody>`;
+  t.gruppen.forEach(g => {
+    const a = rate(g.items,1), b = rate(g.items,2);
+    h += `<tr class="gh"><td style="width:42%">${esc(g.titel)}</td><td>${bar(a,'i1')}${bar(b,'i2')}</td><td class="n" style="width:90px">${fmtD(a===null||b===null?null:b-a)}</td></tr>`;
+    g.items.forEach(it => { const a = rate([it],1), b = rate([it],2);
+      h += `<tr><td title="${esc(it.s)}">&nbsp;&nbsp;${esc(it.l)}</td><td>${bar(a,'i1')}${bar(b,'i2')}</td><td class="n">${fmtD(a===null||b===null?null:b-a)}</td></tr>`; });
+  });
+  h += '</tbody></table>';
+  /* Kinder im Überblick */
+  h += `<h3 style="margin-top:26px">Kinder im Überblick</h3><div class="noprint" style="margin-bottom:8px"><button class="btn dark" id="b-csv">Tabelle als CSV (Excel)</button></div>
+    <table class="l"><thead><tr><th>Name</th><th class="n">Fehler 1</th><th class="n">richtig 1</th><th class="n">Fehler 2</th><th class="n">richtig 2</th><th class="n">Veränderung</th></tr></thead><tbody>`;
+  const sums = {p1:[],p2:[],d:[]};
+  for (const k of ks) {
+    const a = score(k.id,1,t.items), b = score(k.id,2,t.items), d = delta(a,b);
+    if (a.pct!==null) sums.p1.push(a.pct); if (b.pct!==null) sums.p2.push(b.pct); if (d!==null) sums.d.push(d);
+    h += `<tr><td>${esc(k.name)}</td><td class="n">${a.n?a.f:'–'}</td><td class="n">${fmtP(a.pct)}</td><td class="n">${b.n?b.f:'–'}</td><td class="n">${fmtP(b.pct)}</td><td class="n">${fmtD(d)}</td></tr>`;
+  }
+  const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : null;
+  h += `<tr class="gh"><td>Klassenschnitt</td><td></td><td class="n">${fmtP(avg(sums.p1))}</td><td></td><td class="n">${fmtP(avg(sums.p2))}</td><td class="n">${fmtD(avg(sums.d))}</td></tr></tbody></table>`;
+  $('#v-klasse').innerHTML = h;
+}
+
+/* ---------- Steuerung ---------- */
+function render(){
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.v===S.view));
+  $('#tests').innerHTML = Object.entries(TESTS).map(([id,t]) => `<button data-t="${id}" class="${id===S.test?'on':''}">${esc(t.name)}</button>`).join('');
+  $('#d1').value = S.datum[S.test][1]; $('#d2').value = S.datum[S.test][2];
+  for (const v of ['eingabe','kind','klasse']) $('#v-'+v).style.display = v===S.view ? 'block' : 'none';
+  ({eingabe:renderEingabe, kind:renderKind, klasse:renderKlasse})[S.view]();
+  const tr = document.querySelector('thead tr'); if (tr) document.documentElement.style.setProperty('--h1', tr.offsetHeight+'px');
+}
+document.addEventListener('click', e => {
+  const c = e.target.closest('.c');
+  if (c) { setze(c.dataset.k, c.dataset.m, c.dataset.i); const sy = document.querySelector('.wrap'); const x = sy.scrollLeft, y = sy.scrollTop; render(); const w = document.querySelector('.wrap'); w.scrollLeft = x; w.scrollTop = y; return; }
+  const tb = e.target.closest('[data-t]'); if (tb) { S.test = tb.dataset.t; save(); return render(); }
+  const nv = e.target.closest('nav [data-v]'); if (nv) { S.view = nv.dataset.v; save(); return render(); }
+  const del = e.target.closest('[data-del]');
+  if (del) { const k = S.kinder.find(x => x.id===del.dataset.del); if (confirm(`„${k.name}“ und alle Eingaben dieses Kindes löschen?`)) { S.kinder = S.kinder.filter(x => x!==k); for (const t in S.daten) delete S.daten[t][k.id]; save(); render(); } return; }
+  if (e.target.id==='b-csv') csv();
+});
+document.addEventListener('change', e => { if (e.target.id==='sel-kind') { S.kind = e.target.value; save(); render(); } });
+$('#d1').onchange = e => { S.datum[S.test][1] = e.target.value; save(); render(); };
+$('#d2').onchange = e => { S.datum[S.test][2] = e.target.value; save(); render(); };
+
+$('#b-kinder').onclick = () => { $('#namen').value=''; $('#dlg').showModal(); $('#namen').focus(); };
+$('#dlg-x').onclick = () => $('#dlg').close();
+$('#dlg-ok').onclick = () => {
+  $('#namen').value.split('\n').map(s => s.trim()).filter(Boolean).forEach(n => S.kinder.push({id:uid(), name:n}));
+  save(); $('#dlg').close(); render();
+};
+$('#b-sichern').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(S)], {type:'application/json'}));
+  a.download = 'FOEDIMA-Auswertung-' + new Date().toISOString().slice(0,10) + '.json'; a.click();
+};
+$('#b-laden').onclick = () => $('#f-laden').click();
+$('#f-laden').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  f.text().then(t => { try { const d = JSON.parse(t); if (!d.kinder||!d.daten) throw 0; if (confirm('Aktuelle Daten durch die Datei ersetzen?')) { S = Object.assign(leer(), d); save(); render(); } } catch(x){ alert('Das ist keine gültige Sicherungsdatei.'); } });
+  e.target.value = '';
+};
+function csv(){
+  const t = T(), rows = [['Name','Fehler 1','richtig 1 (%)','Fehler 2','richtig 2 (%)','Veränderung (Prozentpunkte)']];
+  for (const k of kinder()) { const a = score(k.id,1,t.items), b = score(k.id,2,t.items), d = delta(a,b);
+    rows.push([k.name, a.n?a.f:'', a.pct===null?'':Math.round(a.pct), b.n?b.f:'', b.pct===null?'':Math.round(b.pct), d===null?'':Math.round(d)]); }
+  const txt = '﻿' + rows.map(r => r.map(x => '"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], {type:'text/csv'}));
+  a.download = 'FOEDIMA-' + t.code + '.csv'; a.click();
+}
+render();
+</script>
+</body>
+</html>
